@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>robotis_op3_demo</name>
+  <name>jp_robotis_op3_demo</name>
   <version>0.1.0</version>
   <description>
     ROS packages for the jp_robotis_op3_demo (meta package)
