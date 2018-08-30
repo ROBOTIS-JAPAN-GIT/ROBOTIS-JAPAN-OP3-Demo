@@ -4,6 +4,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(jp_op3_demo)
 
+# set(CMAKE_CXX_FLAGS "-nostartfiles ${CMAKE_CXX_FLAGS}")
+
 ################################################################################
 # Find catkin packages and libraries for catkin and system dependencies
 ################################################################################
@@ -19,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   robotis_math
   op3_ball_detector
+  op3_demo
 )
 
 find_package(Boost REQUIRED COMPONENTS thread)
@@ -72,6 +75,7 @@ catkin_package(
     cmake_modules
     robotis_math
     op3_ball_detector
+    op3_demo
   DEPENDS Boost EIGEN3
 )
 
@@ -86,56 +90,68 @@ include_directories(
   ${YAML_CPP_INCLUDE_DIRS}
 )
 
-add_executable(op_demo_node 
-  src/demo_node.cpp
-  src/soccer/soccer_demo.cpp
-  src/soccer/ball_tracker.cpp
-  src/soccer/ball_follower.cpp
-  src/action/action_demo.cpp
-  src/vision/vision_demo.cpp
-  src/vision/face_tracker.cpp
+add_executable(jp_op_demo_node 
+  # src/demo_node.cpp
+  # src/soccer/soccer_demo.cpp
+  # src/soccer/ball_tracker.cpp
+  # src/soccer/ball_follower.cpp
+  # src/action/action_demo.cpp
+  # src/vision/vision_demo.cpp
+  # src/vision/face_tracker.cpp
+  # src/cmd_vel/cmd_vel_node.cpp
+  src/cmd_vel_walk.cpp
+  src/cmd_vel_walk_node.cpp
 )
 
-add_dependencies(op_demo_node 
+add_dependencies(jp_op_demo_node 
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
+  # op_demo_node
+  # op3_demo
 )
 
-target_link_libraries(op_demo_node
+target_link_libraries(jp_op_demo_node
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
   ${Eigen3_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
+  # op_demo_node
+  # op3_demo
 )
 
-add_executable(self_test_node 
-  src/test_node.cpp
-  src/soccer/soccer_demo.cpp
-  src/soccer/ball_tracker.cpp
-  src/soccer/ball_follower.cpp
-  src/action/action_demo.cpp
-  src/vision/vision_demo.cpp
-  src/vision/face_tracker.cpp
-  src/test/button_test.cpp
-  src/test/mic_test.cpp
+add_executable(jp_self_test_node 
+  # src/test_node.cpp
+  # src/soccer/soccer_demo.cpp
+  # src/soccer/ball_tracker.cpp
+  # src/soccer/ball_follower.cpp
+  # src/action/action_demo.cpp
+  # src/vision/vision_demo.cpp
+  # src/vision/face_tracker.cpp
+  # src/test/button_test.cpp
+  # src/test/mic_test.cpp
+  # src/cmd_vel/cmd_vel_node.cpp
+  src/cmd_vel_walk.cpp
+  src/cmd_vel_walk_node.cpp
 )
 
-add_dependencies(self_test_node
+add_dependencies(jp_self_test_node
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
+  # self_test_node
 )
 
-target_link_libraries(self_test_node
+target_link_libraries(jp_self_test_node
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
   ${Eigen3_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
+  # self_test_node
 )
 
 ################################################################################
 # Install
 ################################################################################
-install(TARGETS op_demo_node self_test_node
+install(TARGETS jp_op_demo_node jp_self_test_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
