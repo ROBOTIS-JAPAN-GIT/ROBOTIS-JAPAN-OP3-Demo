@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- jp op3 manager -->
+    <include file="$(find jp_op3_demo)/launch/op3_d435_ft_manager.launch"/>
+
+    <!-- Camera and Ball detector -->
+    <!-- <include file="$(find op3_ball_detector)/launch/ball_detector.launch"> -->
+    <!-- </include> -->
+
+    <arg name="config_path" default="$(find op3_ball_detector)/config/ball_detector_params.yaml"/>
+    <node pkg="op3_ball_detector" type="ball_detector_node" name="ball_detector_node" args="" output="screen">
+      <rosparam command="load" file="$(arg config_path)"/>
+      <param name="yaml_path" type="string" value="$(arg config_path)"/>
+      <remap from="/ball_detector_node/image_in" to="/camera/color/image_rect_color" />
+      <remap from="/ball_detector_node/cameraInfo_in" to="/camera/color/camera_info" />
+    </node>
+
+    <!-- face tracking -->
+    <!-- <include file="$(find op3_demo)/launch/face_detection_op3.launch" /> -->
+    <arg name="face_cascade_name_0"  default="$(find face_detection)/include/face_detection/HaarCascades/haarcascade_frontalface_alt.xml" />
+    <arg name="face_cascade_name_1"  default="$(find face_detection)/include/face_detection//HaarCascades/haarcascade_frontalface_alt2.xml" />
+    <arg name="face_cascade_name_2"  default="$(find face_detection)/include/face_detection//HaarCascades/haarcascade_frontalface_alt_tree.xml" />
+    <arg name="face_cascade_name_3"  default="$(find face_detection)/include/face_detection//HaarCascades/haarcascade_frontalface_default.xml" />
+    <arg name="face_cascade_name_4"  default="$(find face_detection)/include/face_detection/lbpCascades/lbpcascade_frontalface.xml" />
+
+    <node pkg="face_detection" type="face_tracking" name="face_tracking"
+          args="$(arg face_cascade_name_0)
+                $(arg face_cascade_name_1)
+                $(arg face_cascade_name_2)
+                $(arg face_cascade_name_3)
+                $(arg face_cascade_name_4)"
+          output="screen">
+      <param name="imageInput" type="string" value="/camera/color/image_rect_color" />
+      <param name="displayed_Image" type="int" value="0" />
+      <!-- <param name="publish" type="int" value="2" /> -->
+      <param name="publish" type="int" value="3" />
+      <param name="start_condition" type="bool" value="false" />
+    </node>
+
+    <!-- camera setting tool -->
+    <!-- in Progress... -->
+    <!-- <include file="$(find op3_camera_setting_tool)/launch/op3_camera_setting_tool.launch" /> -->
+    <!-- <arg name="config_path" default="$(find op3_camera_setting_tool)/config/camera_parameter.yaml"/> -->
+    <!-- <node pkg="op3_camera_setting_tool" type="op3_camera_setting_tool" name="op3_camera_setting_node" output="screen"> -->
+    <!--   <rosparam command="load" file="$(arg config_path)"/> -->
+    <!--   <param name="video_device" type="string" value="/dev/video2" /> -->
+    <!--   <param name="yaml_path" type="string" value="$(arg config_path)"/> -->
+    <!-- </node> -->
+
+
+    <!-- sound player -->
+    <node pkg="ros_madplay_player" type="ros_madplay_player" name="ros_madplay_player" output="screen"/>
+
+    <!-- web setting -->
+    <include file="$(find op3_web_setting_tool)/launch/web_setting_server.launch" />
+
+    <!-- robotis op3 demo -->
+    <arg name="jp" default="false"/>
+    <node pkg="jp_op3_demo" type="jp_op_demo_node" name="op3_demo" output="screen" if="$(arg jp)"/>
+    <node pkg="op3_demo" type="op_demo_node" name="op3_demo" output="screen" unless="$(arg jp)">
+      <!-- <param name="grass_demo" type="bool" value="False" /> -->
+      <!-- <param name="p_gain" value="0.45" /> -->
+      <!-- <param name="d_gain" value="0.045" /> -->
+    </node>
+</launch>
+

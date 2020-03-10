@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- in Progress: classify Right and Left FT sensor -->
+
+  <!-- Plug in LEFT first! -->
+  <arg name="comport_0" default="/dev/ttyACM0" />
+  <arg name="frame_0" default="l_ank_ft_link" />
+  <node pkg="leptrino_force_torque" type="leptrino_force_torque" name="leptrino_0" output="screen">
+    <param name="com_port" value="$(arg comport_0)" />
+    <param name="frame" value="$(arg frame_0)" />
+  </node>
+
+  <!-- Plug in RIGHT next! -->
+  <arg name="comport_1" default="/dev/ttyACM1" />
+  <arg name="frame_1" default="r_ank_ft_link" />
+  <node pkg="leptrino_force_torque" type="leptrino_force_torque" name="leptrino_1" output="screen">
+    <param name="com_port" value="$(arg comport_1)" />
+    <param name="frame" value="$(arg frame_1)" />
+  </node>
+
+</launch>

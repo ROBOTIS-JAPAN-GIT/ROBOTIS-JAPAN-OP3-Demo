@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<launch>
+    <param name="gazebo"                   value="false"    type="bool"/>
+    <param name="gazebo_robot_name"        value="robotis_op3"/>
+    <param name="offset_file_path"         value="$(find op3_manager)/config/offset.yaml"/>
+    <param name="robot_file_path"          value="$(find op3_manager)/config/OP3.robot"/>
+    <param name="init_file_path"           value="$(find op3_manager)/config/dxl_init_OP3.yaml"/>
+    <param name="device_name"              value="/dev/ttyUSB0"/>
+
+    <!-- OP3 Manager -->
+    <node pkg="op3_manager" type="op3_manager" name="op3_manager" output="screen">
+      <param name="angle_unit" value="30" />
+    </node>
+
+    <!-- OP3 Localization -->
+    <!-- <node pkg="op3_localization" type="op3_localization" name="op3_localization" output="screen"/> -->
+
+    <include file="$(find realsense2_camera)/launch/rs_t265.launch">
+      <arg name="serial_no" value="905312110446" />
+      <arg name="camera" value="t265" />
+    </include>
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+      <arg name="serial_no" value="746612070177" />
+      <arg name="camera" value="d435" />
+    </include>
+
+    <!-- FT sensor -->
+    <arg name="ft_sensor" default="true" />
+    <arg name="comport_0" default="/dev/ttyACM0" />
+    <arg name="frame_0"   default="l_ank_ft_link" />
+    <arg name="comport_1" default="/dev/ttyACM1" />
+    <arg name="frame_1"   default="r_ank_ft_link" />
+    <include if="$(arg ft_sensor)" file="$(find jp_op3_demo)/launch/op3_ft_sensor.launch">
+      <arg name="comport_0" value="$(arg comport_0)" />
+      <arg name="frame_0" value="$(arg frame_0)" />
+      <arg name="comport_1" value="$(arg comport_1)" />
+      <arg name="frame_1" value="$(arg frame_1)" />
+    </include>
+
+    <!-- <arg name="depth_processing" default="true"/> -->
+    <!-- <include file="$(find realsense2_camera)/launch/rs_rgbd.launch"> -->
+    <!--   <arg name="depth_processing" value="$(arg depth_processing)"/> -->
+    <!-- </include> -->
+
+    <!-- TF between robot and camera -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="robot_to_camera_broadcaster" -->
+    <!--       args="0 0.0175 0 0 0 0 1 camera_base_link camera_link 100" /> -->
+
+    <!-- robot_description -->
+    <!-- <param name="robot_description" -->
+    <!--        command="$(find xacro)/xacro.py '$(find op3_description)/urdf/robotis_op3.d435.urdf.xacro'"/> -->
+
+    <!-- Combine joint values -->
+    <!-- <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher"> -->
+    <!--   <remap from="/joint_states" to="/robotis/present_joint_states" /> -->
+    <!-- </node> -->
+
+    <!-- Show in Rviz   -->
+    <arg name="rviz"                    default="false" />
+    <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find jp_op3_demo)/rviz/op3_d435.rviz"/>
+
+</launch>

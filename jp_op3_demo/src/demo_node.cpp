@@ -22,6 +22,7 @@
 #include "op3_demo/soccer_demo.h"
 #include "op3_demo/action_demo.h"
 #include "op3_demo/vision_demo.h"
+#include "jp_op3_demo/cmd_vel_node.h"
 #include "robotis_math/robotis_linear_algebra.h"
 #include "robotis_controller_msgs/SyncWriteItem.h"
 
@@ -64,7 +65,8 @@ int main(int argc, char **argv)
 
   //create ros wrapper object
   robotis_op::OPDemo *current_demo = NULL;
-  robotis_op::SoccerDemo *soccer_demo = new robotis_op::SoccerDemo();
+  // robotis_op::SoccerDemo *soccer_demo = new robotis_op::SoccerDemo();
+  robotis_op::CmdVelNode *cmd_vel_node = new robotis_op::CmdVelNode();
   robotis_op::ActionDemo *action_demo = new robotis_op::ActionDemo();
   robotis_op::VisionDemo *vision_demo = new robotis_op::VisionDemo();
 
@@ -130,7 +132,7 @@ int main(int argc, char **argv)
           if (current_demo != NULL)
             current_demo->setDemoDisable();
 
-          current_demo = soccer_demo;
+          current_demo = cmd_vel_node;
           current_demo->setDemoEnable();
 
           ROS_INFO_COND(DEBUG_PRINT, "[Start] Soccer Demo");
