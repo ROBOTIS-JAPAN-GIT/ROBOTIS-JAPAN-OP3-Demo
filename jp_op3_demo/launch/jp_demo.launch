@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <!-- jp op3 manager -->
-    <include file="$(find jp_op3_demo)/launch/op3_d435_ft_manager.launch"/>
+    <include file="$(find jp_op3_demo)/launch/op3_t265_d435_manager.launch"/>
 
     <!-- Camera and Ball detector -->
     <!-- <include file="$(find op3_ball_detector)/launch/ball_detector.launch"> -->
@@ -55,12 +55,12 @@
     <include file="$(find op3_web_setting_tool)/launch/web_setting_server.launch" />
 
     <!-- robotis op3 demo -->
-    <arg name="jp" default="false"/>
+    <arg name="jp" default="true"/>
     <node pkg="jp_op3_demo" type="jp_op_demo_node" name="op3_demo" output="screen" if="$(arg jp)"/>
     <node pkg="op3_demo" type="op_demo_node" name="op3_demo" output="screen" unless="$(arg jp)">
-      <!-- <param name="grass_demo" type="bool" value="False" /> -->
-      <!-- <param name="p_gain" value="0.45" /> -->
-      <!-- <param name="d_gain" value="0.045" /> -->
+      <param name="grass_demo" type="bool" value="False" />
+      <param name="p_gain" value="0.45" />
+      <param name="d_gain" value="0.045" />
     </node>
 </launch>
 
